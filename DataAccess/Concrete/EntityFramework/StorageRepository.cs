@@ -12,5 +12,10 @@ namespace DataAccess.Concrete.EntityFramework
         public StorageRepository(ProjectDbContext context) : base(context)
         {
         }
+
+        public Storage GetById(int id)
+        {
+            return Context.Storages.Where(x => x.Id == id).FirstOrDefault();
+        }
     }
 }

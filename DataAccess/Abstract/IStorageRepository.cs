@@ -6,5 +6,6 @@ namespace DataAccess.Abstract
 {
     public interface IStorageRepository : IEntityRepository<Storage>
     {
+        Storage GetById(int id);
     }
 }

@@ -3,15 +3,17 @@ using System;
 using DataAccess.Concrete.EntityFramework.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DataAccess.Migrations.Pg
 {
     [DbContext(typeof(ProjectDbContext))]
-    partial class ProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220526213016_editModelbuilder")]
+    partial class editModelbuilder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1303,15 +1305,16 @@ namespace DataAccess.Migrations.Pg
 
                     b.HasKey("Id");
 
+                    b.HasIndex("StorageId")
+                        .IsUnique();
+
                     b.ToTable("Stocks");
                 });
 
             modelBuilder.Entity("Entities.Concrete.StockOrders", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
 
                     b.Property<int>("CardId")
                         .HasColumnType("integer");
@@ -1346,6 +1349,36 @@ namespace DataAccess.Migrations.Pg
                     b.HasKey("Id");
 
                     b.ToTable("Storages");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Stock", b =>
+                {
+                    b.HasOne("Entities.Concrete.Storage", null)
+                        .WithOne("Stock")
+                        .HasForeignKey("Entities.Concrete.Stock", "StorageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.Concrete.StockOrders", b =>
+                {
+                    b.HasOne("Entities.Concrete.Stock", "Stock")
+                        .WithOne("StockOrder")
+                        .HasForeignKey("Entities.Concrete.StockOrders", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stock");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Stock", b =>
+                {
+                    b.Navigation("StockOrder");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Storage", b =>
+                {
+                    b.Navigation("Stock");
                 });
 #pragma warning restore 612, 618
         }

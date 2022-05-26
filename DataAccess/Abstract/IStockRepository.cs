@@ -6,5 +6,6 @@ namespace DataAccess.Abstract
 {
     public interface IStockRepository : IEntityRepository<Stock>
     {
+        Stock GetById(int id);
     }
 }

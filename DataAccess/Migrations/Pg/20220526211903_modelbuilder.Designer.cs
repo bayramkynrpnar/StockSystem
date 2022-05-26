@@ -3,15 +3,17 @@ using System;
 using DataAccess.Concrete.EntityFramework.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DataAccess.Migrations.Pg
 {
     [DbContext(typeof(ProjectDbContext))]
-    partial class ProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220526211903_modelbuilder")]
+    partial class modelbuilder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1255,9 +1257,7 @@ namespace DataAccess.Migrations.Pg
             modelBuilder.Entity("Entities.Concrete.Card", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("text");
@@ -1333,9 +1333,7 @@ namespace DataAccess.Migrations.Pg
             modelBuilder.Entity("Entities.Concrete.Storage", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -1346,6 +1344,48 @@ namespace DataAccess.Migrations.Pg
                     b.HasKey("Id");
 
                     b.ToTable("Storages");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Card", b =>
+                {
+                    b.HasOne("Entities.Concrete.Stock", "Stock")
+                        .WithOne("Card")
+                        .HasForeignKey("Entities.Concrete.Card", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Concrete.StockOrders", "StockOrder")
+                        .WithOne("Card")
+                        .HasForeignKey("Entities.Concrete.Card", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stock");
+
+                    b.Navigation("StockOrder");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Storage", b =>
+                {
+                    b.HasOne("Entities.Concrete.Stock", "Stock")
+                        .WithOne("Storage")
+                        .HasForeignKey("Entities.Concrete.Storage", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stock");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Stock", b =>
+                {
+                    b.Navigation("Card");
+
+                    b.Navigation("Storage");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.StockOrders", b =>
+                {
+                    b.Navigation("Card");
                 });
 #pragma warning restore 612, 618
         }

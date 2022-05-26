@@ -58,8 +58,7 @@ namespace Business.Handlers.Cards.Commands
                     SerialNo = request.SerialNo,
                     ImageUrl = request.ImageUrl,
                     Status = request.Status,
-                    Price = request.Price,
-
+                    Price = request.Price
                 };
 
                 _cardRepository.Add(addedCard);

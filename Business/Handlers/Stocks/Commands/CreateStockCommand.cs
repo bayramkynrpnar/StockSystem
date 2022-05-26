@@ -31,11 +31,17 @@ namespace Business.Handlers.Stocks.Commands
         public class CreateStockCommandHandler : IRequestHandler<CreateStockCommand, IResult>
         {
             private readonly IStockRepository _stockRepository;
+            private readonly IStorageRepository _storageRepository;
+            private readonly IStockOrdersRepository _stockOrdersRepository;
             private readonly IMediator _mediator;
-            public CreateStockCommandHandler(IStockRepository stockRepository, IMediator mediator)
+            public CreateStockCommandHandler(IStockRepository stockRepository, IMediator mediator, IStorageRepository storageRepository, IStockOrdersRepository stockOrdersRepository)
             {
                 _stockRepository = stockRepository;
+
                 _mediator = mediator;
+                _storageRepository = storageRepository;
+                _stockOrdersRepository = stockOrdersRepository;
+                
             }
 
             [ValidationAspect(typeof(CreateStockValidator), Priority = 1)]
@@ -49,14 +55,21 @@ namespace Business.Handlers.Stocks.Commands
                 if (isThereStockRecord == true)
                     return new ErrorResult(Messages.NameAlreadyExist);
 
+                var storage = _storageRepository.Get(x => x.Id == request.StorageId);
                 var addedStock = new Stock
                 {
                     CardId = request.CardId,
                     Quantity = request.Quantity,
                     Cost = request.Cost,
                     StorageId = request.StorageId,
-
                 };
+                _stockOrdersRepository.Add(new StockOrders()
+                {
+                    OrderBy = storage.Name,
+                    CardId = request.CardId,
+                    OrderDate = System.DateTime.Now,
+                    OrderType = Entities.Enum.OrderType.Giriş
+                });
 
                 _stockRepository.Add(addedStock);
                 await _stockRepository.SaveChangesAsync();

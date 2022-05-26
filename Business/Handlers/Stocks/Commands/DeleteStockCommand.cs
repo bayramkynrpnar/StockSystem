@@ -23,12 +23,16 @@ namespace Business.Handlers.Stocks.Commands
         public class DeleteStockCommandHandler : IRequestHandler<DeleteStockCommand, IResult>
         {
             private readonly IStockRepository _stockRepository;
+            private readonly IStockOrdersRepository _stockOrderRepository;
+            private readonly IStorageRepository _storage;
             private readonly IMediator _mediator;
 
-            public DeleteStockCommandHandler(IStockRepository stockRepository, IMediator mediator)
+            public DeleteStockCommandHandler(IStockRepository stockRepository, IMediator mediator, IStockOrdersRepository stockOrdersRepository, IStorageRepository storageRepository)
             {
                 _stockRepository = stockRepository;
                 _mediator = mediator;
+                _stockOrderRepository = stockOrdersRepository;
+                _storage = storageRepository;
             }
 
             [CacheRemoveAspect("Get")]
@@ -37,7 +41,15 @@ namespace Business.Handlers.Stocks.Commands
             public async Task<IResult> Handle(DeleteStockCommand request, CancellationToken cancellationToken)
             {
                 var stockToDelete = _stockRepository.Get(p => p.Id == request.Id);
+                var storoge = _storage.Get(x => x.Id == stockToDelete.Id);
 
+                _stockOrderRepository.Add(new Entities.Concrete.StockOrders()
+                {
+                    CardId = stockToDelete.CardId,
+                    OrderDate = System.DateTime.Now,
+                    OrderType = Entities.Enum.OrderType.Çıkış,
+                    OrderBy = storoge.Name
+                });
                 _stockRepository.Delete(stockToDelete);
                 await _stockRepository.SaveChangesAsync();
                 return new SuccessResult(Messages.Deleted);
@@ -45,4 +57,3 @@ namespace Business.Handlers.Stocks.Commands
         }
     }
 }
-
