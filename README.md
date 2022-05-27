@@ -1,4 +1,5 @@
 Stok Takip Sistemi
+
 Devarc mimarisine göre geliştirilen stok takip sisteminin yapabildiği işlemler;
 -	Malzeme kartı oluşturabilmek
 -	Depo tanımlamaları
