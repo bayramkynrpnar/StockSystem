@@ -4,8 +4,7 @@ Devarc mimarisine göre geliştirilen stok takip sisteminin yapabildiği işleml
 -	Depo tanımlamaları
 -	Depolar arası transfer
 -	Malzeme giriş ve çıkışları
--	Depolar arası transfer halinde bir hareket raporu oluşturulması
-şeklindedir.
+-	Genel inceleme ve analiz için hareket raporu.
 
 Devarc mimarisi tam anlamıyla CQRS, Aspect ve SOLID prensiplerine uymaktadır. 
 Bu sebeple oluşturduğumuz Entitylerin database işlemleri için Command ve Qurylerini yazmak, hangi contexti kullanacağı belirtmek gibi
