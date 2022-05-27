@@ -56,6 +56,7 @@ namespace DataAccess.Concrete.EntityFramework.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+                
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

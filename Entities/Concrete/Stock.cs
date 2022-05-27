@@ -12,6 +12,7 @@ namespace Entities.Concrete
         public int Quantity { get; set; }
         public double Cost { get; set; }
         public int StorageId { get; set; }
+        public Card Card { get; set; }
 
     }
 }

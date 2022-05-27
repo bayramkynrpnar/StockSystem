@@ -36,6 +36,7 @@ namespace Core.DataAccess.EntityFramework
         public TEntity Update(TEntity entity)
         {
             Context.Update(entity);
+
             return entity;
         }
 
@@ -175,6 +176,11 @@ namespace Core.DataAccess.EntityFramework
         public int GetCount(Expression<Func<TEntity, bool>> expression = null)
         {
             return expression == null ? Context.Set<TEntity>().Count() : Context.Set<TEntity>().Count(expression);
+        }
+
+        public IQueryable<TEntity> GetAll()
+        {
+            return Context.Set<TEntity>().Where(x => true);
         }
     }
 }

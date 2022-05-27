@@ -14,5 +14,7 @@ namespace Entities.Concrete
         public string ImageUrl { get; set; }
         public bool Status { get; set; }
         public double Price { get; set; }
+        public Stock Stock { get; set; }
+        public StockOrders StockOrder { get; set; }
     }
 }

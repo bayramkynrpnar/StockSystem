@@ -13,5 +13,6 @@ namespace Entities.Concrete
         public OrderType OrderType { get; set; }
         public DateTime OrderDate { get; set; }
         public string OrderBy { get; set; }
+        public Card Card { get; set; }
     }
 }
